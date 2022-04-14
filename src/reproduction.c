@@ -69,6 +69,24 @@ void newGenes(struct organism *organism, uint32_t g1, uint32_t g2) {
         }
 }
 
+uint32_t randomGenes(uint32_t basicIndividual) {
+	uint32_t g, r;
+	uint8_t i;
+	
+	g = 0;
+
+	for(i = 0; i < 32; i++) {
+		r = rand() % BIODIVERSITY;
+		if(r == 1)
+			g |= 1 << i;
+		else if(r == 2);
+		else
+			g |= basicIndividual & (1 << i);
+	}
+
+	return g;
+}
+
 uint32_t parentGenes(uint32_t g1, uint32_t g2) {
         uint32_t result;
         uint8_t genes, i;

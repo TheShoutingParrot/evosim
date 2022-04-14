@@ -23,7 +23,13 @@
 
 #define POS(x)			(((x) < 0) ? -(x) : (x))
 
-#define MUTATION_CHANCE		160
+#define BASIC_GENES		0x75469c01			// The basic genes are the genes that are used as the base of the first individuals
+								// in binary the number is: 
+
+#define MUTATION_CHANCE		10000				// Chance of mutating (1 / MUTATION_CHANCE)
+#define BIODIVERSITY		10				// Chance of the basic gene mutating at the start (1 / BIODIVERSITY)
+
+#define N_OF_ORGANISMS_AT_START	6				// The amount of organisms that are born with the BASIC_GENES (+ mutations) at the start
 
 struct organism {
 	SDL_Rect body;
@@ -70,6 +76,7 @@ void growOrganisms(struct organism **firstOrganism);
 void breedOrganisms(struct organism **firstOrganism, SDL_Rect area);
 void makeOrganismsSingle(struct organism *firstOrganism);
 
+uint32_t randomGenes(uint32_t basicIndividual);
 void newGenes(struct organism *organism, uint32_t g1, uint32_t g2);
 int determineSize(uint32_t genes);
 uint32_t determineSpeed(uint32_t genes);

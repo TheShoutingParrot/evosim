@@ -5,6 +5,8 @@ SDL_Renderer *renderer;
 
 int main(int argv, char *argc[]) {
 	size_t capTime, frameTicks, cycle, ticksPerFrame;
+	uint8_t i;
+
 	SDL_Rect logicalRect, area1, area2;
 	SDL_Event event;
 
@@ -22,12 +24,12 @@ int main(int argv, char *argc[]) {
 
 	cycle = 1;
 
-	newOrganism(0xc5460af2, 0xc546341f, randomPoint(area1), &p1);
-	newOrganism(0x35463450, 0x3566349f, randomPoint(area1), &p1);
-	newOrganism(0x45663400, 0x45665400, randomPoint(area1), &p1);
-	newOrganism(0x45665430, 0x44665413, randomPoint(area1), &p1);
-	newOrganism(0x45764401, 0x44664400, randomPoint(area1), &p1);
-	newOrganism(0x45664421, 0x00460a12, randomPoint(area1), &p1);
+	srand((unsigned) time(NULL));
+
+	// The following for-loop creates the first (by default 6) organisms
+	for(i = 0; i < N_OF_ORGANISMS_AT_START; i++) {
+		newOrganism(randomGenes(BASIC_GENES), randomGenes(BASIC_GENES), randomPoint(area1), &p1);
+	}
 
 	growOrganisms(&p1);
 
