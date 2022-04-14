@@ -62,7 +62,7 @@ void growOrganisms(struct organism **firstOrganism) {
         while(organism != NULL) {
                 organism->growth++;
 
-                if(organism->growth == 2) {
+                if(organism->growth == ORGANISM_LIFESPAN) {
                         if(organism == *firstOrganism) {
                                 *firstOrganism = organism->next;
                         }

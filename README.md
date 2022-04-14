@@ -13,9 +13,11 @@ The simulation starts out with a few organisms that breed and by left-clicking o
 
 | Key 	| Action |
 |-------|-------------|
-| H	| Halve the population				|
-| +	| Speed the simulation up 			|
-| -	| Slow the simulation down 			|
-| Enter	| Return the simulation to it's normal speed	|
-| 1	| Enter 1 population mode 			|
-| 2	| Enter 2 populations mode			|
+| H	| Halve the population							|
+| +	| Speed the simulation up 						|
+| -	| Slow the simulation down 						|
+| Enter	| Return the simulation to it's normal speed				|
+| s	| Toggle "single-step" mode						|
+| Space | Manually create new generation of organisms (when in single-step mode)|
+| 1	| Enter 1 population mode 						|
+| 2	| Enter 2 populations mode						|
