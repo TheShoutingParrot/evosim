@@ -92,7 +92,7 @@ void updateOrganismDirection(struct organism *firstOrganism, uint8_t speed);
 void moveOrganisms(SDL_Rect area, struct organism *firstOrganism, uint8_t speedFactor);
 SDL_Point randomPoint(SDL_Rect area);
 void reallocatePopulation(struct organism *firstOrganism, SDL_Rect area);
-void migrateOrganism(int x, int y, struct organism **p1, struct organism **p2, SDL_Rect area);
+void migrateOrganism(int x, int y, struct organism **p1, struct organism **p2, SDL_Rect area1, SDL_Rect area2);
 
 // src/reproduction.c
 void breedOrganisms(struct organism **firstOrganism, SDL_Rect area);

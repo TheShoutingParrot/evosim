@@ -4,7 +4,7 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 
 int main(int argv, char *argc[]) {
-	size_t capTime, frameTicks, cycle, gen, frame;
+	size_t capTime, frameTicks, cycle, gen;
 	uint8_t i, gSpeed;
 	bool singleStep;
 
@@ -27,7 +27,6 @@ int main(int argv, char *argc[]) {
 	p1 = p2 = NULL;
 
 	cycle = 1;
-	frame = 0;
 
 	// The higher this value is the faster the game's speed is
 	gSpeed = DEFAULT_SIM_SPEED;
@@ -180,7 +179,7 @@ two_populations:
 						killOrganism(event.button.x, event.button.y, &p1, &p2);
 					}
 					else if(event.button.button == SDL_BUTTON_RIGHT) {
-						migrateOrganism(event.button.x, event.button.y, &p1, &p2, area2);
+						migrateOrganism(event.button.x, event.button.y, &p1, &p2, area1, area2);
 					}
 					break;
 

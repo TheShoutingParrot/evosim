@@ -113,23 +113,40 @@ void reallocatePopulation(struct organism *firstOrganism, SDL_Rect area) {
         }
 }
 
-void migrateOrganism(int x, int y, struct organism **p1, struct organism **p2, SDL_Rect area) {
-        struct organism *organism, *prevOrganism;
+void migrateOrganism(int x, int y, struct organism **p1, struct organism **p2, SDL_Rect area1, SDL_Rect area2) {
+        struct organism *organism, *prevOrganism, **originP, **targetP;
+	SDL_Rect targetA;
 
-        prevOrganism = *p1;
-        organism = *p1;
+	if(x >= area1.x && x <= (area1.x + area1.w) && y >= area1.y && y <= (area1.y + area1.w)) {
+        	prevOrganism = *p1;
+	        organism = *p1;
+
+		originP = p1;
+		targetP = p2;
+
+		targetA = area2;
+	} 
+	else if(x >= area2.x && x <= (area2.x + area2.w) && y >= area2.y && y <= (area2.y + area2.w)) {
+        	prevOrganism = *p2;
+	        organism = *p2;
+
+		originP = p2;
+		targetP = p1;
+
+		targetA = area1;
+	}
+	else
+		return;
 
         while(organism != NULL) {
                 if(x >= organism->body.x && x <= (organism->body.x + organism->body.w)
                                 && y >= organism->body.y && y <= (organism->body.y + organism->body.h)) {
-                        newOrganism(organism->aGenes, organism->cGenes, randomPoint(area), p2);
+                        newOrganism(organism->aGenes, organism->cGenes, randomPoint(targetA), targetP);
 
-                        if(organism == *p1) {
-                                *p1 = organism->next;
-                        }
-                        else {
+                        if(organism == *originP)
+                                *originP = organism->next;
+                        else
                                 prevOrganism->next = organism->next;
-                        }
 
                         free(organism);
 
