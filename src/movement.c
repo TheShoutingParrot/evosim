@@ -1,6 +1,9 @@
 #include <evosim.h>
 
 void updateOrganismDirection(struct organism *firstOrganism, uint8_t speed) {
+	if(speed == 0)
+		return;
+
         struct organism *organism;
         SDL_Point newDir;
 

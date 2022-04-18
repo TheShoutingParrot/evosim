@@ -5,7 +5,7 @@ SDL_Renderer *renderer;
 
 int main(int argv, char *argc[]) {
 	size_t capTime, frameTicks, cycle, gen;
-	uint8_t i, gSpeed;
+	uint8_t i, gSpeed, speedBefore;
 	bool singleStep;
 
 	SDL_Rect logicalRect, area1, area2;
@@ -30,6 +30,8 @@ int main(int argv, char *argc[]) {
 
 	// The higher this value is the faster the game's speed is
 	gSpeed = DEFAULT_SIM_SPEED;
+	// speedBefore is used with the pause mechanism
+	speedBefore = DEFAULT_SIM_SPEED;
 
 	// By default single step mode is off, in it the organisms breed only manually
 	// (by clicking the space bar)
@@ -77,15 +79,27 @@ one_population:
 							break;
 
 						case SDLK_MINUS:
-							if(gSpeed <= 1);
+							if(gSpeed == 0);
 							else
 								gSpeed--;
+
+							break;
+
+						// Shortcut to pause the simulation
+						case SDLK_p:
+							if(gSpeed) {
+								speedBefore = gSpeed;
+								gSpeed = 0;
+							}
+							else
+								gSpeed = speedBefore;
+
 							break;
 
 						case SDLK_RETURN:
 							gSpeed = DEFAULT_SIM_SPEED;
 							break;
-
+							
 						// Toggle single step mode
 						case SDLK_s:
 							singleStep = !singleStep;
@@ -129,7 +143,7 @@ one_population:
 		updateOrganismDirection(p1, gSpeed);
 		moveOrganisms(area1, p1, gSpeed);
 
-		if(!singleStep) {
+		if(!singleStep && gSpeed != 0) {
 			if((cycle % (150/gSpeed)) == 0) {
 				breedOrganisms(&p1, area1);
 				gen++;
@@ -198,10 +212,22 @@ two_populations:
 							break;
 
 						case SDLK_MINUS:
-							if(gSpeed <= 1);
+							if(gSpeed == 0);
 							else
 								gSpeed--;
 							break;
+
+						// Shortcut to pause the simulation
+						case SDLK_p:
+							if(gSpeed) {
+								speedBefore = gSpeed;
+								gSpeed = 0;
+							}
+							else
+								gSpeed = speedBefore;
+
+							break;
+
 
 						case SDLK_RETURN:
 							gSpeed = DEFAULT_SIM_SPEED;
@@ -264,7 +290,7 @@ two_populations:
 		drawOrganisms(p1);
 		drawOrganisms(p2);
 
-		if(!singleStep) {
+		if(!singleStep && gSpeed != 0) {
 			if((cycle % (150/gSpeed)) == 0) {
 				breedOrganisms(&p1, area1);
 				breedOrganisms(&p2, area2);
