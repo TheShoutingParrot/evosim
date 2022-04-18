@@ -142,7 +142,7 @@ uint32_t determineSpeed(uint32_t genes) {
 
         for(i = 0; i < 10; i++) {
                 if((genes >> (i)) & 1)
-                        speed += 1;
+                        speed += SPEED_INCREASE_PER_GENE;
         }
 
         if((genes & (1 << 31)))

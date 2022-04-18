@@ -1,6 +1,6 @@
 #include <evosim.h>
 
-void updateOrganismDirection(struct organism *firstOrganism) {
+void updateOrganismDirection(struct organism *firstOrganism, uint8_t speed) {
         struct organism *organism;
         SDL_Point newDir;
 
@@ -32,7 +32,7 @@ void updateOrganismDirection(struct organism *firstOrganism) {
 
                         organism->direction = newDir;
 
-                        organism->cycles = rand() % 25 + 1;
+                        organism->cycles = (rand() % (100/speed) + 1);
                 }
 
                 organism->cycles--;
@@ -41,23 +41,26 @@ void updateOrganismDirection(struct organism *firstOrganism) {
         }
 }
 
-void moveOrganisms(SDL_Rect area, struct organism *firstOrganism) {
+void moveOrganisms(SDL_Rect area, struct organism *firstOrganism, uint8_t speedFactor) {
         struct organism *organism;
+	uint32_t speed;
 
         organism = firstOrganism;
 
         if(area.x == 0) {
                 while(organism != NULL) {
-                        if(((organism->body.x + organism->body.w) + organism->direction.x * organism->speed > area.w
-                                        || (organism->body.y + organism->body.h) + organism->direction.y * organism->speed > area.h
-                                        || organism->body.x + organism->direction.x * organism->speed < area.x
-                                        || organism->body.y + organism->direction.y * organism->speed < 0)) {
+			speed = organism->speed * (uint32_t)speedFactor;
+
+                        if(((organism->body.x + organism->body.w) + organism->direction.x * speed > area.w
+                                        || (organism->body.y + organism->body.h) + organism->direction.y * speed > area.h
+                                        || organism->body.x + organism->direction.x * speed < area.x
+                                        || organism->body.y + organism->direction.y * speed < 0)) {
                                 organism->direction.x = -organism->direction.x;
                                 organism->direction.y = -organism->direction.y;
                         }
 
-                        organism->body.x += organism->direction.x * organism->speed;
-                        organism->body.y += organism->direction.y * organism->speed;
+                        organism->body.x += organism->direction.x * speed;
+                        organism->body.y += organism->direction.y * speed;
 
                         organism = organism->next;
                 }
@@ -65,16 +68,18 @@ void moveOrganisms(SDL_Rect area, struct organism *firstOrganism) {
 
         else {
                 while(organism != NULL) {
-                        if(((organism->body.x + organism->body.w) + organism->direction.x * organism->speed > (area.w + area.x)
-                                        || (organism->body.y + organism->body.h) + organism->direction.y * organism->speed > area.h
-                                        || organism->body.x + organism->direction.x * organism->speed < area.x
-                                        || organism->body.y + organism->direction.y * organism->speed < 0)) {
+			speed = organism->speed * (uint32_t)speedFactor;
+
+                        if(((organism->body.x + organism->body.w) + organism->direction.x * speed > (area.w + area.x)
+                                        || (organism->body.y + organism->body.h) + organism->direction.y * speed > area.h
+                                        || organism->body.x + organism->direction.x * speed < area.x
+                                        || organism->body.y + organism->direction.y * speed < 0)) {
                                 organism->direction.x = -organism->direction.x;
                                 organism->direction.y = -organism->direction.y;
                         }
 
-                        organism->body.x += organism->direction.x * organism->speed;
-                        organism->body.y += organism->direction.y * organism->speed;
+                        organism->body.x += organism->direction.x * speed;
+                        organism->body.y += organism->direction.y * speed;
 
                         organism = organism->next;
                 }

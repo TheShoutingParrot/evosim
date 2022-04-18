@@ -18,15 +18,14 @@
 #define	WINDOW_LOGICAL_WIDTH 	1680
 #define WINDOW_LOGICAL_HEIGHT	1050
 
-#define TICKS_PER_FRAME		1000 / 45
+#define TICKS_PER_FRAME		1000 / 30
 
 #define LOG_V			SDL_LOG_CATEGORY_VIDEO
 #define LOG_A			SDL_LOG_CATEGORY_APPLICATION
 
 #define POS(x)			(((x) < 0) ? -(x) : (x))
 
-#define BASIC_GENES		0x75469c01			// The basic genes are the genes that are used as the base of the first individuals
-								// in binary the number is: 
+#define BASIC_GENES		0x75469c00			// The basic genes are the genes that are used as the base of the first individuals
 
 #define MUTATION_CHANCE		10000				// Chance of mutating (1 / MUTATION_CHANCE)
 #define BIODIVERSITY		10				// Chance of the basic gene mutating at the start (1 / BIODIVERSITY)
@@ -34,6 +33,9 @@
 #define N_OF_ORGANISMS_AT_START	6				// The amount of organisms that are born with the BASIC_GENES (+ mutations) at the start
 
 #define ORGANISM_LIFESPAN	2				// The lifespan of the organism by default (1000 * (LIFESPAN + 1))
+
+#define DEFAULT_SIM_SPEED	3				// The speed of the simulation, minimum is 1 and max is 75
+#define SPEED_INCREASE_PER_GENE	0				// The amount of "increase" of the organisms speed per speed gene that is equals to 1
 
 // variable and structure definitions
 
@@ -86,8 +88,8 @@ void printOrganismInfo(struct organism organism);
 void printOrganismList(struct organism *firstOrganism);
 
 // src/movement.c
-void updateOrganismDirection(struct organism *firstOrganism);
-void moveOrganisms(SDL_Rect area, struct organism *firstOrganism);
+void updateOrganismDirection(struct organism *firstOrganism, uint8_t speed);
+void moveOrganisms(SDL_Rect area, struct organism *firstOrganism, uint8_t speedFactor);
 SDL_Point randomPoint(SDL_Rect area);
 void reallocatePopulation(struct organism *firstOrganism, SDL_Rect area);
 void migrateOrganism(int x, int y, struct organism **p1, struct organism **p2, SDL_Rect area);

@@ -4,8 +4,8 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 
 int main(int argv, char *argc[]) {
-	size_t capTime, frameTicks, cycle, ticksPerFrame, gen;
-	uint8_t i;
+	size_t capTime, frameTicks, cycle, gen, frame;
+	uint8_t i, gSpeed;
 	bool singleStep;
 
 	SDL_Rect logicalRect, area1, area2;
@@ -26,9 +26,11 @@ int main(int argv, char *argc[]) {
 
 	p1 = p2 = NULL;
 
-	ticksPerFrame = TICKS_PER_FRAME;
-
 	cycle = 1;
+	frame = 0;
+
+	// The higher this value is the faster the game's speed is
+	gSpeed = DEFAULT_SIM_SPEED;
 
 	// By default single step mode is off, in it the organisms breed only manually
 	// (by clicking the space bar)
@@ -70,17 +72,19 @@ one_population:
 							break;
 							
 						case SDLK_PLUS:
-							if(ticksPerFrame < 4);
+							if(gSpeed >= 75);
 							else
-								ticksPerFrame -= 1;
+								gSpeed++;
 							break;
 
 						case SDLK_MINUS:
-							ticksPerFrame += 1;
+							if(gSpeed <= 1);
+							else
+								gSpeed--;
 							break;
 
 						case SDLK_RETURN:
-							ticksPerFrame = TICKS_PER_FRAME;
+							gSpeed = DEFAULT_SIM_SPEED;
 							break;
 
 						// Toggle single step mode
@@ -123,21 +127,19 @@ one_population:
 		SDL_SetRenderDrawColor(renderer, 0xcc, 0xcc, 0xcc, 0xff);
 		SDL_RenderFillRect(renderer, &logicalRect);
 
-		updateOrganismDirection(p1);
-		moveOrganisms(area1, p1);
-		drawOrganisms(p1);
+		updateOrganismDirection(p1, gSpeed);
+		moveOrganisms(area1, p1, gSpeed);
 
 		if(!singleStep) {
-			if(cycle % 50 == 0) {
+			if((cycle % (150/gSpeed)) == 0) {
 				breedOrganisms(&p1, area1);
 				gen++;
 			}
 
-			if(cycle % 150 == 0) {
+			if(cycle % (450/gSpeed) == 0)
 				makeOrganismsSingle(p1);
-			}
 
-			if(cycle == 500) {
+			if(cycle % (1500/gSpeed) == 0) {
 				growOrganisms(&p1);
 
 				cycle = 0;
@@ -146,11 +148,13 @@ one_population:
 			cycle++;
 		}
 
+		drawOrganisms(p1);
 		SDL_RenderPresent(renderer);
 
 		frameTicks = (SDL_GetTicks() - capTime);
-		if(frameTicks < ticksPerFrame)
-			SDL_Delay(ticksPerFrame - frameTicks);
+		if(frameTicks < TICKS_PER_FRAME)
+			SDL_Delay(TICKS_PER_FRAME - frameTicks);
+
 	}
 
 two_populations:
@@ -189,17 +193,19 @@ two_populations:
 							break;
 							
 						case SDLK_PLUS:
-							if(ticksPerFrame < 4);
+							if(gSpeed >= 75);
 							else
-								ticksPerFrame -= 1;
+								gSpeed++;
 							break;
 
 						case SDLK_MINUS:
-							ticksPerFrame += 1;
+							if(gSpeed <= 1);
+							else
+								gSpeed--;
 							break;
 
 						case SDLK_RETURN:
-							ticksPerFrame = TICKS_PER_FRAME;
+							gSpeed = DEFAULT_SIM_SPEED;
 							break;
 
 						// Toggle single step mode
@@ -250,29 +256,28 @@ two_populations:
 		SDL_SetRenderDrawColor(renderer, 0xaa, 0xaa, 0xaa, 0xff);
 		SDL_RenderFillRect(renderer, &area2);
 
-		updateOrganismDirection(p1);
-		updateOrganismDirection(p2);
+		updateOrganismDirection(p1, gSpeed);
+		updateOrganismDirection(p2, gSpeed);
 
-		moveOrganisms(area1, p1);
-		moveOrganisms(area2, p2);
+		moveOrganisms(area1, p1, gSpeed);
+		moveOrganisms(area2, p2, gSpeed);
 
 		drawOrganisms(p1);
 		drawOrganisms(p2);
 
 		if(!singleStep) {
-			if(cycle % 50 == 0) {
+			if((cycle % (150/gSpeed)) == 0) {
 				breedOrganisms(&p1, area1);
 				breedOrganisms(&p2, area2);
-
 				gen++;
 			}
 
-			if(cycle % 150 == 0) {
+			if(cycle % (450/gSpeed) == 0) {
 				makeOrganismsSingle(p1);
 				makeOrganismsSingle(p2);
 			}
 
-			if(cycle == 1000) {
+			if(cycle % (1500/gSpeed) == 0) {
 				growOrganisms(&p1);
 				growOrganisms(&p2);
 
@@ -285,8 +290,8 @@ two_populations:
 		SDL_RenderPresent(renderer);
 
 		frameTicks = (SDL_GetTicks() - capTime);
-		if(frameTicks < ticksPerFrame)
-			SDL_Delay(ticksPerFrame - frameTicks);
+		if(frameTicks < TICKS_PER_FRAME)
+			SDL_Delay(TICKS_PER_FRAME - frameTicks);
 	}
 
 	
